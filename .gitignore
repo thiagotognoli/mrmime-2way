@@ -7,3 +7,5 @@ node_modules
 /index.js
 /index.mjs
 /src/index.ts
+/deno/mod.ts
+/deno/readme.md
