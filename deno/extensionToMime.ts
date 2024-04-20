@@ -432,13 +432,15 @@ const mimes: Record<string, string> = {
   "yang": "application/yang",
   "yin": "application/yin+xml",
   "yml": "text/yaml",
-  "zip": "application/zip",
+  "zip": "application/zip"
 };
 
-function lookup(extn: string): string | undefined {
-  let tmp = ("" + extn).trim().toLowerCase();
-  let idx = tmp.lastIndexOf(".");
-  return mimes[!~idx ? tmp : tmp.substring(++idx)];
+function extensionToMimeLookup(extn: string): string | undefined {
+	let extnNormalized = ("" + extn).trim().toLowerCase();
+	let extensionIdx = extnNormalized.lastIndexOf(".");
+	return mimes[
+		!~extensionIdx ? extnNormalized : extnNormalized.substring(++extensionIdx)
+	];
 }
 
-export { lookup, mimes };
+export { mimes, extensionToMimeLookup };

@@ -4,8 +4,9 @@ node_modules
 *.lock
 *.log
 
-/index.js
-/index.mjs
-/src/index.ts
-/deno/mod.ts
-/deno/readme.md
+/extensionToMime.js
+/extensionToMime.mjs
+/src/extensionToMime.ts
+/mimeToExtension.js
+/mimeToExtension.mjs
+/src/mimeToExtension.ts

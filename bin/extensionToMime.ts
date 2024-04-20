@@ -1,14 +1,14 @@
 // @ts-check
 /// <reference types="node" />
-import { join, dirname, resolve } from 'node:path';
-import { spawnSync } from 'node:child_process';
-import * as fs from 'node:fs';
-import DB from 'mime-db';
+import { join, dirname, resolve } from "node:path";
+import { spawnSync } from "node:child_process";
+import * as fs from "node:fs";
+import DB from "mime-db";
 
-const ROOT = resolve('.');
+const ROOT = resolve(".");
 
-const input = join(ROOT, 'src/$index.ts');
-const denomod = join(ROOT, 'deno/mod.ts');
+const input = join(ROOT, "src/$extensionToMime.ts");
+const denomod = join(ROOT, "deno/extensionToMime.ts");
 
 function write(file: string, data: string) {
 	let f = resolve(ROOT, file);
@@ -54,7 +54,9 @@ let IGNORE = /[/](x-|vnd\.)/;
 let raw: Record<string, string> = {};
 
 let mtype: string, arr: string[];
-let i=0, extn: string, prev: string;
+let i = 0,
+	extn: string,
+	prev: string;
 
 for (mtype in DB) {
 	if (IGNORE.test(mtype)) continue;
@@ -62,7 +64,7 @@ for (mtype in DB) {
 	arr = DB[mtype].extensions || [];
 	if (!arr.length) continue;
 
-	for (i=0; i < arr.length; i++) {
+	for (i = 0; i < arr.length; i++) {
 		extn = arr[i];
 		prev = raw[extn];
 
@@ -72,7 +74,7 @@ for (mtype in DB) {
 			msg += `\n   (next) "${mtype}"`;
 			mtype = compare(prev, mtype);
 			msg += `\n   (keep) "${mtype}"`;
-			process.stdout.write(msg + '\n\n');
+			process.stdout.write(msg + "\n\n");
 		}
 
 		raw[extn] = mtype;
@@ -80,43 +82,49 @@ for (mtype in DB) {
 }
 
 let mimes: Record<string, string> = {};
-Object.keys(raw).sort().forEach(x => {
-	mimes[x] = raw[x];
-});
+Object.keys(raw)
+	.sort()
+	.forEach((x) => {
+		mimes[x] = raw[x];
+	});
 
-let content = fs.readFileSync(input, 'utf8').replace(
-	'{}', JSON.stringify(mimes, null, 2)
-) + '\n';
+let content =
+	fs.readFileSync(input, "utf8").replace("{}", JSON.stringify(mimes, null, 2)) +
+	"\n";
 
-let esm = content + 'export { mimes, lookup };\n';
-let cjs = content + 'exports.mimes = mimes;\nexports.lookup = lookup;\n';
+let esm = content + "export { mimes, extensionToMimeLookup };\n";
+let cjs =
+	content +
+	"exports.mimes = mimes;\nexports.extensionToMimeLookup = extensionToMimeLookup;\n";
 
 // build exports
-write('index.mjs', esm);
-write('index.js', cjs);
+write("extensionToMime.mjs", esm);
+write("extensionToMime.js", cjs);
 
 let denodir = dirname(denomod);
 fs.existsSync(denodir) || fs.mkdirSync(denodir);
 
-fs.copyFileSync('readme.md', join(denodir, 'readme.md'));
-console.log('\n~> "deno/readme.md" created');
+fs.copyFileSync("extensionToMime.md", join(denodir, "extensionToMime.md"));
+console.log('\n~> "deno/extensionToMime.md" created');
 
-write('deno/mod.ts', esm.replace(
-	'function lookup(extn) {',
-	'function lookup(extn: string): string | undefined {',
-).replace(
-	'const mimes = {',
-	'const mimes: Record<string, string> = {',
-));
+write(
+	"deno/extensionToMime.ts",
+	esm
+		.replace(
+			"function extensionToMimeLookup(extn) {",
+			"function extensionToMimeLookup(extn: string): string | undefined {"
+		)
+		.replace("const mimes = {", "const mimes: Record<string, string> = {")
+);
 
 if (!process.env.CI) {
 	try {
-		spawnSync('deno', ['fmt', denomod], { cwd: ROOT });
-		console.log('\n~> $ deno fmt "deno/mod.ts"');
+		spawnSync("deno", ["fmt", denomod], { cwd: ROOT });
+		console.log('\n~> $ deno fmt "deno/extensionToMime.ts"');
 	} catch (err) {
-		console.log('[deno]', err.stack);
+		console.log("[deno]", err.stack);
 	}
 }
 
-fs.copyFileSync(denomod, 'src/index.ts');
-console.log('\n~> "src/index.ts" created');
+fs.copyFileSync(denomod, "src/extensionToMime.ts");
+console.log('\n~> "src/extensionToMime.ts" created');

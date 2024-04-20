@@ -9,6 +9,9 @@
   <a href="https://github.com/lukeed/mrmime/actions">
     <img src="https://github.com/lukeed/mrmime/workflows/CI/badge.svg" alt="CI" />
   </a>
+  <a href="https://licenses.dev/npm/mrmime">
+    <img src="https://licenses.dev/b/npm/mrmime" alt="licenses" />
+  </a>
   <a href="https://npmjs.org/package/mrmime">
     <img src="https://badgen.now.sh/npm/dm/mrmime" alt="downloads" />
   </a>
@@ -21,24 +24,22 @@
   A tiny (2.8kB) and fast utility for getting a MIME type from an extension or filename
 </div>
 
-
 ## Features
 
-* Lightweight – 2.8kB gzip<br>
+- Lightweight – 2.8kB gzip<br>
   _Only includes standard mime types; all experimental and vendor-specific mimetypes removed._
 
-* [Performant](#benchmarks)<br>
+- [Performant](#benchmarks)<br>
   _All lookups are O(1) with minimal processing._
 
-* Comprehensive Dictionary<br>
+- Comprehensive Dictionary<br>
   _Generated from [`mime-db`](https://github.com/jshttp/mime-db), which aggregates the IANA, NGINX, and Apache datasets._
 
-* Customizable<br>
+- Customizable<br>
   _Exposes the `mimes` dictionary for easy additions or overrides._
 
-* Supports Native ESM and [Deno](https://deno.land/x/mrmime)<br>
+- Supports Native ESM and [Deno](https://deno.land/x/mrmime)<br>
   _Ships with CommonJS and ESM support!_
-
 
 ## Install
 
@@ -46,43 +47,43 @@
 $ npm install --save mrmime
 ```
 
-
 ## Usage
 
 ```js
-import { lookup, mimes } from 'mrmime';
+import { lookup, mimes } from "mrmime";
 
 // Get a MIME type
 // ---
-lookup('txt'); //=> "text/plain"
-lookup('.txt'); //=> "text/plain"
-lookup('a.txt'); //=> "text/plain"
+lookup("txt"); //=> "text/plain"
+lookup(".txt"); //=> "text/plain"
+lookup("a.txt"); //=> "text/plain"
 
 // Unknown extension
 // ---
-lookup('.xyz'); //=> undefined
+lookup(".xyz"); //=> undefined
 
 // Add extension to dictionary
 // ---
-mimes['xyz'] = 'hello/world';
-lookup('xyz'); //=> "hello/world"
+mimes["xyz"] = "hello/world";
+lookup("xyz"); //=> "hello/world"
 ```
-
 
 ## API
 
 ### lookup(input)
+
 Returns: `string` or `undefined`
 
 #### input
+
 Type: `string`
 
 The extension or filename to lookup.
 
 > **Important:**
->   * Any `input` value is cast to string, lowercased, and trimmed.
->   * If a filename or filepath is provided, only the extension will be used.
-
+>
+> - Any `input` value is cast to string, lowercased, and trimmed.
+> - If a filename or filepath is provided, only the extension will be used.
 
 ## Benchmarks
 
@@ -110,7 +111,6 @@ Benchmark :: filename ("file.ext")
   mrmime        x 512,823 ops/sec ±0.12% (99 runs sampled)
 ```
 
-
 ## Credits
 
 Of course, a thank-you to [`mime`](https://github.com/broofa/mime) serving the community all these years & for being a all-encompassing MIME type library. I've only ever needed lookup/`getType` functionality – and now ESM support – so `mrmime` can only ever support 1/3 of what `mime` offers, at best.
@@ -120,7 +120,6 @@ This would not be possible without the team behind [`mime-db`](https://github.co
 Artwork created by [mintinol](https://www.deviantart.com/mintinol), which I found [here](https://www.deviantart.com/mintinol/art/Mr-Mime-373927920).
 
 Finally, thanks to [Tim Branyen](https://github.com/tbranyen) for donating the package name :)
-
 
 ## License
 

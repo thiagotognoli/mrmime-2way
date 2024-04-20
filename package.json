@@ -29,7 +29,8 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "tsm bin/index.ts",
+    "build-extensionToMime": "tsm bin/extensionToMime.ts",
+    "build-mimeToExtension": "tsm bin/mimeToExtension.ts",
     "test": "uvu -r tsm test"
   },
   "keywords": [
